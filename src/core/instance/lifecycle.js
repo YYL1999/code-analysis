@@ -33,6 +33,9 @@ export function initLifecycle (vm: Component) {
   const options = vm.$options
 
   // locate first non-abstract parent
+  /**
+   * 如果options有parent属性，则进行深度遍历，最后将最深层的$parent进行赋值
+   */
   let parent = options.parent
   if (parent && !options.abstract) {
     while (parent.$options.abstract && parent.$parent) {
@@ -40,7 +43,7 @@ export function initLifecycle (vm: Component) {
     }
     parent.$children.push(vm)
   }
-
+  //给VUE添加若干个属性
   vm.$parent = parent
   vm.$root = parent ? parent.$root : vm
 

@@ -9,15 +9,18 @@ import { mark, measure } from '../util/perf'
 import { initLifecycle, callHook } from './lifecycle'
 import { initProvide, initInjections } from './inject'
 import { extend, mergeOptions, formatComponentName } from '../util/index'
-
+//全部变量uid
 let uid = 0
 
 export function initMixin (Vue: Class<Component>) {
+  //给VUE的原型添加_init方法
   Vue.prototype._init = function (options?: Object) {
+    //创建一个VUE实例的副本vm，保存VUE的数据
     const vm: Component = this
     // a uid
+    //给vm添加属性_uid，初始值为0，每次初始化一个实例即+1，相当于给每个VUE实例一个编号，证明其是唯一的
     vm._uid = uid++
-
+    
     let startTag, endTag
     /* istanbul ignore if */
     if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
@@ -48,7 +51,9 @@ export function initMixin (Vue: Class<Component>) {
       vm._renderProxy = vm
     }
     // expose real self
+    //将_self属性指向它本身
     vm._self = vm
+    //初始化生命周期
     initLifecycle(vm)
     initEvents(vm)
     initRender(vm)
