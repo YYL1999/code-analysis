@@ -6,10 +6,15 @@ import { handleError } from './error'
 import { isIE, isIOS, isNative } from './env'
 
 export let isUsingMicroTask = false
-
+//定义回调函数队列
 const callbacks = []
+//定义一个异步锁
 let pending = false
-
+/**
+ * 将异步锁关闭  拷贝一份回调函数 并将回调函数清空 挨个去执行回调函数
+ * 目的是防止nextTick里面的nextTick进入回调队列，就像原本应该上下一趟车的人上了这一趟车
+ * 
+ */
 function flushCallbacks () {
   pending = false
   const copies = callbacks.slice(0)
@@ -19,26 +24,14 @@ function flushCallbacks () {
   }
 }
 
-// Here we have async deferring wrappers using microtasks.
-// In 2.5 we used (macro) tasks (in combination with microtasks).
-// However, it has subtle problems when state is changed right before repaint
-// (e.g. #6813, out-in transitions).
-// Also, using (macro) tasks in event handler would cause some weird behaviors
-// that cannot be circumvented (e.g. #7109, #7153, #7546, #7834, #8109).
-// So we now use microtasks everywhere, again.
-// A major drawback of this tradeoff is that there are some scenarios
-// where microtasks have too high a priority and fire in between supposedly
-// sequential events (e.g. #4521, #6690, which have workarounds)
-// or even between bubbling of the same event (#6566).
+
 let timerFunc
 
-// The nextTick behavior leverages the microtask queue, which can be accessed
-// via either native Promise.then or MutationObserver.
-// MutationObserver has wider support, however it is seriously bugged in
-// UIWebView in iOS >= 9.3.3 when triggered in touch event handlers. It
-// completely stops working after triggering a few times... so, if native
-// Promise is available, we will use it:
-/* istanbul ignore next, $flow-disable-line */
+/**
+ * 能力检测 
+ * 检测浏览器是否支持Promise 支持的话定义一个Promise 或者MutationObserver 还进行了IE判断 最后不行就用setTimeout
+ * 简单说就是判断用宏任务还是微任务去执行这件事（宏任务消耗大）
+ */
 if (typeof Promise !== 'undefined' && isNative(Promise)) {
   const p = Promise.resolve()
   timerFunc = () => {
@@ -83,7 +76,15 @@ if (typeof Promise !== 'undefined' && isNative(Promise)) {
     setTimeout(flushCallbacks, 0)
   }
 }
-
+/**
+ * 
+ * @param {*} cb 
+ * @param {*} ctx 
+ * nextTick函数本身 
+ * 将回调函数推入回调函数队列中
+ * 如果没有异步锁 增加异步锁 开始执行回调函数队列 举个栗子就是乘客都上车了 关上车门要开车了
+ * 如果没有传入函数还行 那就自己定义一个promise去执行
+ */
 export function nextTick (cb?: Function, ctx?: Object) {
   let _resolve
   callbacks.push(() => {

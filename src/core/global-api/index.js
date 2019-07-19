@@ -29,6 +29,7 @@ export function initGlobalAPI (Vue: GlobalAPI) {
       )
     }
   }
+  //创建config属性
   Object.defineProperty(Vue, 'config', configDef)
 
   // exposed util methods.
@@ -46,6 +47,7 @@ export function initGlobalAPI (Vue: GlobalAPI) {
   Vue.nextTick = nextTick
 
   // 2.6 explicit observable API
+  //添加函数，返回
   Vue.observable = <T>(obj: T): T => {
     observe(obj)
     return obj
@@ -58,8 +60,9 @@ export function initGlobalAPI (Vue: GlobalAPI) {
 
   // this is used to identify the "base" constructor to extend all plain-object
   // components with in Weex's multi-instance scenarios.
-  Vue.options._base = Vue
-
+Vue.options._base = Vue
+  </T>
+   //将builtIncomponents的属性全部复制一份给vue.optiopns.components
   extend(Vue.options.components, builtInComponents)
 
   initUse(Vue)

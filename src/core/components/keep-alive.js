@@ -66,6 +66,7 @@ export default {
   },
 
   destroyed () {
+    //删除内容
     for (const key in this.cache) {
       pruneCacheEntry(this.cache, key, this.keys)
     }
