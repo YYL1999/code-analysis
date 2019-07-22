@@ -6,6 +6,7 @@ export default {
   create (_: any, vnode: VNodeWithData) {
     registerRef(vnode)
   },
+  //新节点和旧节点的不一致直接重新注册，并删除旧节点的refs
   update (oldVnode: VNodeWithData, vnode: VNodeWithData) {
     if (oldVnode.data.ref !== vnode.data.ref) {
       registerRef(oldVnode, true)
