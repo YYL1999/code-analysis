@@ -9,20 +9,20 @@ export default class VNode {
   children: ?Array<VNode>;//子节点
   text: string | void;//文本
   elm: Node | void;//关联的原生节点
-  ns: string | void;
-  context: Component | void; // rendered in this component's scope
+  ns: string | void;//命名空间 namespace
+  context: Component | void; // 当前节点的编译作用域
   key: string | number | void;//唯一值 性能优化 
-  componentOptions: VNodeComponentOptions | void;
-  componentInstance: Component | void; // component instance
-  parent: VNode | void; // component placeholder node
+  componentOptions: VNodeComponentOptions | void;//创建组件实例会用到的选项信息
+  componentInstance: Component | void; // 当期节点对应的组件实例
+  parent: VNode | void; // 当前节点的父节点
 
   // strictly internal
-  raw: boolean; // contains raw HTML? (server only)
-  isStatic: boolean; // hoisted static node
-  isRootInsert: boolean; // necessary for enter transition check
-  isComment: boolean; // empty comment placeholder?
-  isCloned: boolean; // is a cloned node?
-  isOnce: boolean; // is a v-once node?
+  raw: boolean; // 判断是否为HTML或普通文本，innerHTML的时候为true，innerText的时候为false
+  isStatic: boolean; // 静态节点的标识
+  isRootInsert: boolean; // 是否作为根节点插入，被包裹的节点，该属性的值为false
+  isComment: boolean; // 当前节点是否为注释节点
+  isCloned: boolean; // 当前节点是否为克隆节点
+  isOnce: boolean; // 是否有v-once指令
   asyncFactory: Function | void; // async component factory function
   asyncMeta: Object | void;
   isAsyncPlaceholder: boolean;
@@ -73,22 +73,19 @@ export default class VNode {
     return this.componentInstance
   }
 }
-
+//没有内容的注释节点
 export const createEmptyVNode = (text: string = '') => {
   const node = new VNode()
   node.text = text
   node.isComment = true
   return node
 }
-
+//文本节点
 export function createTextVNode (val: string | number) {
   return new VNode(undefined, undefined, undefined, String(val))
 }
 
-// optimized shallow clone
-// used for static nodes and slot nodes because they may be reused across
-// multiple renders, cloning them avoids errors when DOM manipulations rely
-// on their elm reference.
+//克隆节点 可以为任何类型 区别在于isClone为true
 export function cloneVNode (vnode: VNode): VNode {
   const cloned = new VNode(
     vnode.tag,
