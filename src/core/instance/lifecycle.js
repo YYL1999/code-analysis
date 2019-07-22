@@ -67,11 +67,14 @@ export function lifecycleMixin (Vue: Class<Component>) {
     vm._vnode = vnode
     // Vue.prototype.__patch__ is injected in entry points
     // based on the rendering backend used.
+       // 如果需要diff的prevVnode不存在，那么就用新的vnode创建一个真实dom节点
     if (!prevVnode) {
       // initial render
+       // $el参数为真实的dom节点
       vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
     } else {
       // updates
+      // prevVnode存在，传入prevVnode和vnode进行diff，完成真实dom的更新工作
       vm.$el = vm.__patch__(prevVnode, vnode)
     }
     restoreActiveInstance()
@@ -89,7 +92,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
     // updated hook is called by the scheduler to ensure that children are
     // updated in a parent's updated hook.
   }
-
+  //强制更新页面 
   Vue.prototype.$forceUpdate = function () {
     const vm: Component = this
     if (vm._watcher) {
