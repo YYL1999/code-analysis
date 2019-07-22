@@ -31,7 +31,7 @@ import {
 export const emptyNode = new VNode('', {}, [])
 
 const hooks = ['create', 'activate', 'update', 'remove', 'destroy']
-
+//判断节点是否相同 返回true或者false
 function sameVnode (a, b) {
   return (
     a.key === b.key && (
