@@ -70,7 +70,7 @@ function waitForServerPrefetch (vm, resolve, reject) {
   }
   resolve()
 }
-
+//根据节点类型渲染节点 
 function renderNode (node, isRoot, context) {
   if (node.isString) {
     renderStringNode(node, context)
