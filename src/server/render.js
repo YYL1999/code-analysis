@@ -273,7 +273,7 @@ function renderAsyncComponent (node, isRoot, context) {
     }
   }
 }
-
+//渲染string节点
 function renderStringNode (el, context) {
   const { write, next } = context
   if (isUndef(el.children) || el.children.length === 0) {

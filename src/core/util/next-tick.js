@@ -83,7 +83,7 @@ if (typeof Promise !== 'undefined' && isNative(Promise)) {
  * nextTick函数本身 
  * 将回调函数推入回调函数队列中
  * 如果没有异步锁 增加异步锁 开始执行回调函数队列 举个栗子就是乘客都上车了 关上车门要开车了
- * 如果没有传入函数还行 那就自己定义一个promise去执行
+ * 如果没有传入函数还行 那就自己定义一个promise去返回
  */
 export function nextTick (cb?: Function, ctx?: Object) {
   let _resolve
