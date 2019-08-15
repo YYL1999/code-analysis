@@ -2,7 +2,7 @@
 
 const MAX_STACK_DEPTH = 800
 const noop = _ => _
-
+//很强大的三目运算符 目的选择处理方式个宏任务还是微任务 次序为process.nextTick()=>Promise=>setTimeout=>noop
 const defer = typeof process !== 'undefined' && process.nextTick
   ? process.nextTick
   : typeof Promise !== 'undefined'

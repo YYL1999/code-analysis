@@ -70,7 +70,7 @@ function waitForServerPrefetch (vm, resolve, reject) {
   }
   resolve()
 }
-
+//根据节点类型渲染节点 
 function renderNode (node, isRoot, context) {
   if (node.isString) {
     renderStringNode(node, context)
@@ -273,7 +273,7 @@ function renderAsyncComponent (node, isRoot, context) {
     }
   }
 }
-
+//渲染string节点
 function renderStringNode (el, context) {
   const { write, next } = context
   if (isUndef(el.children) || el.children.length === 0) {
