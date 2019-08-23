@@ -28,7 +28,7 @@ export function setActiveInstance(vm: Component) {
     activeInstance = prevActiveInstance
   }
 }
-
+//生命周期函数
 export function initLifecycle (vm: Component) {
   const options = vm.$options
 
